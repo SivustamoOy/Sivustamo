@@ -112,7 +112,7 @@ hr.viiva1 {
 <hr class="viiva1">
 <p><b>Käyttötuki</b></p>
 <p>Mikäli epäilet, ettei sivusto toimi kuten pitäisi, ota yhteyttä Sivustamon tukeen ja autamme pulmasi kanssa!</p>
-<a href="https://www.sivustamo.fi/tuki/" class="buttonsivustamo">Tukilomake</a>
+<a href="https://www.sivustamo.fi/tuki/" target="_blank" class="buttonsivustamo">Tukilomake</a>
 <a href="mailto:tuki@sivustamo.fi" class="buttonsivustamo">tuki@sivustamo.fi</a>
 <a href="tel:0401876687" class="buttonsivustamo">040 187 6687</a>
 <br>
