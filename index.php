@@ -3,7 +3,7 @@
  * Plugin Name:       Sivustamo base
  * Plugin URI:        https://github.com/SivustamoOy/Sivustamo
  * Description:       Peruskoodit jokaiselle sivustolle
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Matti Mieskonen
  * License:           Closed
  * GitHub Plugin URI: https://github.com/SivustamoOy/Sivustamo
