@@ -3,7 +3,7 @@
  * Plugin Name:       Sivustamo base
  * Plugin URI:        https://github.com/SivustamoOy/Sivustamo
  * Description:       Peruskoodit jokaiselle sivustolle
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Matti Mieskonen
  * License:           Closed
  * GitHub Plugin URI: https://github.com/SivustamoOy/Sivustamo
@@ -112,6 +112,7 @@ hr.viiva1 {
 <hr class="viiva1">
 <p><b>Käyttötuki</b></p>
 <p>Mikäli epäilet, ettei sivusto toimi kuten pitäisi, ota yhteyttä Sivustamon tukeen ja autamme pulmasi kanssa!</p>
+<a href="https://www.sivustamo.fi/tuki/" class="buttonsivustamo">Tukilomake</a>
 <a href="mailto:tuki@sivustamo.fi" class="buttonsivustamo">tuki@sivustamo.fi</a>
 <a href="tel:0401876687" class="buttonsivustamo">040 187 6687</a>
 <br>
@@ -119,7 +120,7 @@ hr.viiva1 {
 <hr class="viiva1">
 <p><b>Jatkokehitys</b></p>
 <p>Kaipaatko sivustolle uutta toimintoa tai onko tarve vielä mietintämyssyn alla? Ota molemmissa tapauksissa yhteyttä, niin kartoitetaan tilanne yhdessä.</p>
-<a href="myynti@sivustamo.fi" class="buttonsivustamo">myynti@sivustamo.fi</a>
+<a href="mailto:myynti@sivustamo.fi" class="buttonsivustamo">myynti@sivustamo.fi</a>
 <a href="tel:+358401876612" class="buttonsivustamo">040 187 6612</a>
 	
 	';
