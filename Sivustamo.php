@@ -3,7 +3,7 @@
  * Plugin Name:       Sivustamo
  * Plugin URI:        https://github.com/SivustamoOy/Sivustamo
  * Description:       Peruskoodit jokaiselle sivustolle
- * Version:           1.0.3
+ * Version:           1.0.4
  * Author:            Matti Mieskonen
  * License:           Closed
  * GitHub Plugin URI: https://github.com/SivustamoOy/Sivustamo
@@ -12,80 +12,89 @@
  */
 
 /* 404 ohjaus etusivulle */
-function redirect_404s() {
-if(is_404()) {
-wp_redirect(home_url(), '301');
+if (function_exists('redirect_404s')) {
+    function redirect_404s()
+    {
+        if (is_404()) {
+            wp_redirect(home_url(), '301');
+        }
+    }
+
+    add_action('wp_enqueue_scripts', 'redirect_404s');
 }
-}
-add_action('wp_enqueue_scripts', 'redirect_404s');
 
 /* update sähköpostien esto */
-function wpb_stop_update_emails( $send, $type, $core_update, $result ) {
-    if ( ! empty( $type ) && $type == 'success' ) {
-        return false;
+if (function_exists('wpb_stop_update_emails')) {
+    function wpb_stop_update_emails($send, $type, $core_update, $result)
+    {
+        if (!empty($type) && $type == 'success') {
+            return false;
+        }
+        return true;
     }
-    return true;
+
+    add_filter('auto_core_update_send_email', 'wpb_stop_auto_update_emails', 10, 4);
+    add_filter('auto_plugin_update_send_email', '__return_false');
+    add_filter('auto_theme_update_send_email', '__return_false');
 }
-add_filter( 'auto_core_update_send_email', 'wpb_stop_auto_update_emails', 10, 4 );
-add_filter( 'auto_plugin_update_send_email', '__return_false' );
-add_filter( 'auto_theme_update_send_email', '__return_false' );
-
 /* back to wordpress näppäin pois */
-//functions.php, or in plugin
+if (function_exists('admin_footer')) {
+    add_action('admin_footer', function () {
 
-//change "back to wordpress editor" button text
+        ?>
+        <style>
 
-add_action('admin_footer', function(){
+            body.elementor-editor-active #elementor-switch-mode-button {
+                background-color: #eb1717;
+                color: #fff;
+                border-color: #eb1717;
+            }
 
-    ?>
-    <style>
+            body.elementor-editor-active #elementor-switch-mode-button:hover {
+                background-color: #c71616;
+            }
 
-        body.elementor-editor-active #elementor-switch-mode-button{
-            background-color: #eb1717;
-            color: #fff;
-            border-color: #eb1717;
-        }
-        body.elementor-editor-active #elementor-switch-mode-button:hover {
-            background-color: #c71616;
-        }
+        </style>
 
-    </style>
+        <script>
 
-    <script>
+            (function ($) {
+                window.$ = $;
+                //edit the elementor gutenburg fragment
+                var fragment = $('#elementor-gutenberg-button-switch-mode')[0];
+                var tmp = document.createElement("div");
+                tmp.innerHTML = fragment.innerHTML;
+                $(tmp)
+                    .find('#elementor-switch-mode-button span.elementor-switch-mode-on')
+                    .text("Poista elementor käytöstä");
+                fragment.innerHTML = tmp.innerHTML;
 
-        ( function( $ ) {
-            window.$ = $;
-            //edit the elementor gutenburg fragment
-            var fragment = $('#elementor-gutenberg-button-switch-mode')[0];
-            var tmp = document.createElement("div");
-            tmp.innerHTML = fragment.innerHTML;
-            $(tmp)
-                .find('#elementor-switch-mode-button span.elementor-switch-mode-on')
-                .text("Poista elementor käytöstä");
-            fragment.innerHTML = tmp.innerHTML;
+                //on non gutenburg edit screen, directly edit the dom
+                $('#elementor-switch-mode-button span.elementor-switch-mode-on')
+                    .text("Poista elementor käytöstä");
 
-            //on non gutenburg edit screen, directly edit the dom
-            $('#elementor-switch-mode-button span.elementor-switch-mode-on')
-                .text("Poista elementor käytöstä");
+            })((jQuery));
+        </script>
 
-        })(( jQuery ));
-    </script>
+        <?php
 
-    <?php
-
-}, 999); //must run after elementor outputs fragments
+    }, 999); //must run after elementor outputs fragments
+}
 
 /* ylläpitoteksti asiakkaalle */
-add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');
+if (function_exists('my_custom_dashboard_widgets')) {
+    add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');
 
-function my_custom_dashboard_widgets() {
-    global $wp_meta_boxes;
+    function my_custom_dashboard_widgets()
+    {
+        global $wp_meta_boxes;
 
-    wp_add_dashboard_widget('custom_help_widget', 'Sivustamon asiakaspalvelu', 'custom_dashboard_help');
-}
+        wp_add_dashboard_widget('custom_help_widget', 'Sivustamon asiakaspalvelu', 'custom_dashboard_help');
+    }
 
-function custom_dashboard_help() {
-    echo '
+    function custom_dashboard_help()
+    {
+        echo '
 	<style>
 .buttonsivustamo {
   font-family: "Poppins", Sans-serif;
@@ -124,4 +133,5 @@ hr.viiva1 {
 <a href="tel:+358401876612" class="buttonsivustamo">040 187 6612</a>
 	
 	';
+    }
 }
