@@ -4,7 +4,7 @@
  * Plugin Name:       Sivustamo
  * Plugin URI:        https://github.com/SivustamoOy/Sivustamo
  * Description:       Peruskoodit jokaiselle sivustolle
- * Version:           2.1.0
+ * Version:           2.2.0
  * Author:            Matti Mieskonen
  * License:           Closed
  * GitHub Plugin URI: https://github.com/SivustamoOy/Sivustamo
@@ -246,7 +246,7 @@ hr.viiva1 {
 <p><b>Jatkokehitys</b></p>
 <p>Kaipaatko sivustolle uutta toimintoa tai onko tarve vielä mietintämyssyn alla? Ota molemmissa tapauksissa yhteyttä, niin kartoitetaan tilanne yhdessä.</p>
 <a href="mailto:myynti@sivustamo.fi" class="buttonsivustamo">myynti@sivustamo.fi</a>
-<a href="tel:+358401876612" class="buttonsivustamo">040 187 6612</a>
+<a href="tel:+358409401510" class="buttonsivustamo">040 940 1510</a>
 	
 	';
     }
