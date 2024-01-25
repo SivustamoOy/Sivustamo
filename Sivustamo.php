@@ -216,7 +216,7 @@ if ( (!function_exists('sivustamo_tukiviesti') ) && (get_option('sivustamo_tukiv
   font-family: "Inter", Sans-serif;
   font-size: 14px;
   font-weight: 600;
-  background-color: #00a9c7;
+  background-color: transparent;
   border-radius: 30px;
   color: #444444;
   padding: 15px 30px;
