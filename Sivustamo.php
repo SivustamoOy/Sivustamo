@@ -213,21 +213,26 @@ if ( (!function_exists('sivustamo_tukiviesti') ) && (get_option('sivustamo_tukiv
         echo '
 	<style>
 .buttonsivustamo {
-  font-family: "Poppins", Sans-serif;
+  font-family: "Inter", Sans-serif;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   background-color: #00a9c7;
   border-radius: 30px;
-  color: white;
-  padding: 15px 32px;
+  color: #444444;
+  padding: 15px 30px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   margin: 4px 2px;
   cursor: pointer;
+  border: solid 1px #ED5AB3;
+}
+.buttonsivustamo:hover {
+  color: #ffffff;
+  background-image: linear-gradient(270deg, var( --e-global-color-secondary ) 0%, var( --e-global-color-accent ) 100%);
 }
 hr.viiva1 {
-  border-top: 1px solid #00a9c7;
+  border-top: 1px solid #D1D1D1;
 }
 </style>
 <img src="https://www.sivustamo.fi/logo/logo.svg" width="280" height="125" title="Sivustamo Oy" alt="Sivustamo Oy" />
