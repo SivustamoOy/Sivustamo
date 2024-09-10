@@ -4,12 +4,14 @@
  * Plugin Name:       Sivustamo
  * Plugin URI:        https://github.com/SivustamoOy/Sivustamo
  * Description:       Peruskoodit jokaiselle sivustolle
- * Version:           2.2.0
+ * Version:           2.3.0
  * Author:            Matti Mieskonen
  * License:           Closed
  * GitHub Plugin URI: https://github.com/SivustamoOy/Sivustamo
- * GitHub Plugin URI: SivustamoOy/Sivustamo
  * Primary Branch:    main
+ * Requires at least: 5.2
+ * Requires PHP:      7.2
+ * Update URI:        https://github.com/SivustamoOy/Sivustamo
  */
 
 // If this file is called directly, abort.
@@ -37,7 +39,6 @@ class Sivustamo_Deactivator
         delete_option('backtopwp');
         delete_option('sivustamo_tukiviesti');
     }
-
 }
 
 function activate_sivustamo()
@@ -55,9 +56,19 @@ register_deactivation_hook(__FILE__, 'deactivate_sivustamo');
 
 class Sivustamo
 {
+    private $allowed_ips = [
+        '95.217.63.43',
+        '95.216.12.251',
+        '65.109.105.54',
+        '135.181.118.89'
+    ];
+
     function __construct() {
         self::loadSettings();
+        add_shortcode('sivustamo_link', array($this, 'sivustamo_link_shortcode'));
+        add_action('init', array($this, 'check_server_ip'));
     }
+
     public function loadSettings() {
         add_action('admin_menu', array($this, 'sivustamo_plugin_setup_menu'));
     }
@@ -70,29 +81,26 @@ class Sivustamo
     function sivustamo_init()
     {
         if (isset($_GET['sivustamo-plugin-save'])){
-            // TODO --
-            // each of these update_option functions should sanitize data first (not shown in this example)
             if (isset($_POST['redirect_404s'])){
-                update_option('redirect_404s', $_POST['redirect_404s']);
+                update_option('redirect_404s', sanitize_text_field($_POST['redirect_404s']));
             } else {
                 update_option('redirect_404s', 0);
             }
             if (isset($_POST['wpb_stop_update_emails'])){
-                update_option('wpb_stop_update_emails', $_POST['wpb_stop_update_emails']);
+                update_option('wpb_stop_update_emails', sanitize_text_field($_POST['wpb_stop_update_emails']));
             } else {
                 update_option('wpb_stop_update_emails', 0);
             }
             if (isset($_POST['backtopwp'])){
-                update_option('backtopwp', $_POST['backtopwp']);
+                update_option('backtopwp', sanitize_text_field($_POST['backtopwp']));
             } else {
                 update_option('backtopwp', 0);
             }
             if (isset($_POST['sivustamo_tukiviesti'])){
-                update_option('sivustamo_tukiviesti', $_POST['sivustamo_tukiviesti']);
+                update_option('sivustamo_tukiviesti', sanitize_text_field($_POST['sivustamo_tukiviesti']));
             } else {
                 update_option('sivustamo_tukiviesti', 0);
             }
-            // redirect back to form
             wp_redirect($_SERVER['HTTP_REFERER']);
             exit();
         }
@@ -120,12 +128,53 @@ class Sivustamo
 
             <?php submit_button(); ?>
         </form>
-            <?php
+        <?php
+    }
 
+    public function sivustamo_link_shortcode() {
+        if ($this->is_allowed_ip()) {
+            return 'Kotisivut: <a title="Laitetaan yrityksesi näkyville!" href="https://www.sivustamo.fi" target="_blank" rel="noopener">Sivustamo Oy</a>';
+        }
+        return '';
+    }
+
+    private function is_allowed_ip() {
+        $server_ip = $_SERVER['SERVER_ADDR'];
+        return in_array($server_ip, $this->allowed_ips);
+    }
+
+    public function check_server_ip() {
+        if (!$this->is_allowed_ip()) {
+            $this->cleanup_plugins_and_settings();
+        }
+    }
+
+    private function cleanup_plugins_and_settings() {
+        // Deactivate and delete Perfmatters plugin if it exists
+        if (is_plugin_active('perfmatters/perfmatters.php')) {
+            deactivate_plugins('perfmatters/perfmatters.php');
+            delete_plugins(['perfmatters/perfmatters.php']);
+        }
+
+        // Deactivate and delete LiteSpeed Cache plugin if it exists
+        if (is_plugin_active('litespeed-cache/litespeed-cache.php')) {
+            deactivate_plugins('litespeed-cache/litespeed-cache.php');
+            delete_plugins(['litespeed-cache/litespeed-cache.php']);
+        }
+
+        // Remove Perfmatters settings
+        delete_option('perfmatters_options');
+
+        // Remove LiteSpeed Cache settings
+        global $wpdb;
+        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'litespeed.conf%'");
+
+        // Remove the shortcode functionality
+        remove_shortcode('sivustamo_link');
     }
 }
-$si=new Sivustamo();
-/* admin init */
+
+$si = new Sivustamo();
 
 /* 404 ohjaus etusivulle */
 if ( (!function_exists('redirect_404s') ) && (get_option('redirect_404s')==1) ) {
@@ -153,13 +202,12 @@ if ( (!function_exists('wpb_stop_update_emails') ) && (get_option('wpb_stop_upda
     add_filter('auto_plugin_update_send_email', '__return_false');
     add_filter('auto_theme_update_send_email', '__return_false');
 }
+
 /* back to wordpress näppäin pois */
 if  (get_option('backtopwp')==1) {
     add_action('admin_footer', function () {
-
         ?>
         <style>
-
             body.elementor-editor-active #elementor-switch-mode-button {
                 background-color: #eb1717;
                 color: #fff;
@@ -169,11 +217,9 @@ if  (get_option('backtopwp')==1) {
             body.elementor-editor-active #elementor-switch-mode-button:hover {
                 background-color: #c71616;
             }
-
         </style>
 
         <script>
-
             (function ($) {
                 window.$ = $;
                 //edit the elementor gutenburg fragment
@@ -191,9 +237,7 @@ if  (get_option('backtopwp')==1) {
 
             })((jQuery));
         </script>
-
         <?php
-
     }, 999); //must run after elementor outputs fragments
 }
 
@@ -211,48 +255,47 @@ if ( (!function_exists('sivustamo_tukiviesti') ) && (get_option('sivustamo_tukiv
     function sivustamo_dashboard_help()
     {
         echo '
-	<style>
-.buttonsivustamo {
-  font-family: "Inter", Sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: transparent;
-  border-radius: 30px;
-  color: #444444;
-  padding: 15px 30px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  margin: 4px 2px;
-  cursor: pointer;
-  border: solid 1px #ED5AB3;
-}
-.buttonsivustamo:hover {
-  color: #ffffff;
-  background-image: linear-gradient(270deg, var( --e-global-color-secondary ) 0%, var( --e-global-color-accent ) 100%);
-}
-hr.viiva1 {
-  border-top: 1px solid #D1D1D1;
-}
-</style>
-<img src="https://www.sivustamo.fi/logo/logo.svg" width="280" height="125" title="Sivustamo Oy" alt="Sivustamo Oy" />
-	<p><b>Tervetuloa!</b></p>
-	<p>Olet Sivustamon rakentaman ja ylläpitämän WordPressin ylläpitoalueella.</p>
-	
-<hr class="viiva1">
-<p><b>Käyttötuki</b></p>
-<p>Mikäli epäilet, ettei sivusto toimi kuten pitäisi, ota yhteyttä Sivustamon tukeen ja autamme pulmasi kanssa!</p>
-<a href="https://www.sivustamo.fi/tuki/" target="_blank" class="buttonsivustamo">Tukilomake</a>
-<a href="mailto:tuki@sivustamo.fi" class="buttonsivustamo">tuki@sivustamo.fi</a>
-<a href="tel:+358401876687" class="buttonsivustamo">040 187 6687</a>
-<br>
-<br>
-<hr class="viiva1">
-<p><b>Jatkokehitys</b></p>
-<p>Kaipaatko sivustolle uutta toimintoa tai onko tarve vielä mietintämyssyn alla? Ota molemmissa tapauksissa yhteyttä, niin kartoitetaan tilanne yhdessä.</p>
-<a href="mailto:myynti@sivustamo.fi" class="buttonsivustamo">myynti@sivustamo.fi</a>
-<a href="tel:+358409401510" class="buttonsivustamo">040 940 1510</a>
-	
-	';
+        <style>
+        .buttonsivustamo {
+          font-family: "Inter", Sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          background-color: transparent;
+          border-radius: 30px;
+          color: #444444;
+          padding: 15px 30px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          margin: 4px 2px;
+          cursor: pointer;
+          border: solid 1px #ED5AB3;
+        }
+        .buttonsivustamo:hover {
+          color: #ffffff;
+          background-image: linear-gradient(270deg, var( --e-global-color-secondary ) 0%, var( --e-global-color-accent ) 100%);
+        }
+        hr.viiva1 {
+          border-top: 1px solid #D1D1D1;
+        }
+        </style>
+        <img src="https://www.sivustamo.fi/logo/logo.svg" width="280" height="125" title="Sivustamo Oy" alt="Sivustamo Oy" />
+        <p><b>Tervetuloa!</b></p>
+        <p>Olet Sivustamon rakentaman ja ylläpitämän WordPressin ylläpitoalueella.</p>
+        
+        <hr class="viiva1">
+        <p><b>Käyttötuki</b></p>
+        <p>Mikäli epäilet, ettei sivusto toimi kuten pitäisi, ota yhteyttä Sivustamon tukeen ja autamme pulmasi kanssa!</p>
+        <a href="https://www.sivustamo.fi/tuki/" target="_blank" class="buttonsivustamo">Tukilomake</a>
+        <a href="mailto:tuki@sivustamo.fi" class="buttonsivustamo">tuki@sivustamo.fi</a>
+        <a href="tel:+358401876687" class="buttonsivustamo">040 187 6687</a>
+        <br>
+        <br>
+        <hr class="viiva1">
+        <p><b>Jatkokehitys</b></p>
+        <p>Kaipaatko sivustolle uutta toimintoa tai onko tarve vielä mietintämyssyn alla? Ota molemmissa tapauksissa yhteyttä, niin kartoitetaan tilanne yhdessä.</p>
+        <a href="mailto:myynti@sivustamo.fi" class="buttonsivustamo">myynti@sivustamo.fi</a>
+        <a href="tel:+358409401510" class="buttonsivustamo">040 940 1510</a>
+        ';
     }
 }
