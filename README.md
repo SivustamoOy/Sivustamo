@@ -1,63 +1,73 @@
 # Sivustamo WordPress Plugin
 
-## Description
+## Kuvaus
 
-Sivustamo is a custom WordPress plugin designed to provide essential functionalities for websites managed by Sivustamo Oy. It includes features for site management, performance optimization, and customer support.
+Sivustamo on räätälöity WordPress-lisäosa, joka tarjoaa keskeisiä toimintoja Sivustamo Oy:n hallinnoimille verkkosivustoille. Se sisältää ominaisuuksia sivuston hallintaan, suorituskyvyn optimointiin ja asiakastukeen.
 
-## Features
+## Versio
 
-- IP-based functionality control
-- 404 error redirection to homepage
-- Suppression of WordPress auto-update emails
-- Custom admin interface modifications
-- Support widget for the WordPress dashboard
-- Shortcode for Sivustamo attribution link
+2.6.2
 
-## Installation
+## Ominaisuudet
 
-1. Download the plugin files and upload them to your `/wp-content/plugins/sivustamo` directory, or install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Use the Sivustamo menu item in the WordPress admin area to configure plugin settings.
+- IP-pohjainen toiminnallisuuden hallinta
+- 404-virheiden uudelleenohjaus etusivulle
+- WordPress-päivitysten sähköposti-ilmoitusten esto
+- Mukautetut ylläpitokäyttöliittymän muokkaukset
+- Tukiwidget WordPress-hallintapaneelissa
+- Shortcode Sivustamo-attribuutiolinkkiä varten
+- Automaattinen IP-osoitteen tarkistus ja ilmoitus (Slack-integraatio)
+- Automaattinen lisäosien poisto ja siivous tietyissä tilanteissa
 
-## Usage
+## Asennus
 
-### Admin Settings
+1. Lataa lisäosan tiedostot ja siirrä ne `/wp-content/plugins/sivustamo`-hakemistoon, tai asenna lisäosa suoraan WordPressin lisäosanäkymästä.
+2. Aktivoi lisäosa WordPress-hallintapaneelin 'Lisäosat'-osiossa.
+3. Käytä Sivustamo-valikkoa WordPress-hallintapaneelissa lisäosan asetusten määrittämiseen.
 
-Navigate to the Sivustamo settings page in your WordPress admin area to configure the following options:
+## Käyttö
 
-- Redirect 404 errors to homepage
-- Stop auto-update success emails
-- Hide "Back to WordPress" button
-- Enable Sivustamo support widget
+### Hallintapaneelin asetukset
+
+Siirry Sivustamo-asetussivulle WordPress-hallintapaneelissa määrittääksesi seuraavat asetukset:
+
+- 404-virheiden uudelleenohjaus etusivulle
+- Automaattisten päivitysten onnistumisviestien esto
+- "Takaisin WordPressiin" -painikkeen piilotus
+- Sivustamo-tukiwidgetin käyttöönotto
 
 ### Shortcode
 
-Use the `[sivustamo_link]` shortcode in your posts or pages to display the Sivustamo attribution link.
+Käytä `[sivustamo_link]`-shortcodea artikkeleissa tai sivuilla näyttääksesi Sivustamo-attribuutiolinkin.
 
-## IP Restrictions
+## IP-rajoitukset
 
-The plugin includes IP-based restrictions for certain functionalities. Ensure your server's IP is included in the allowed list if you want to use all features.
+Lisäosa sisältää IP-pohjaisia rajoituksia tietyille toiminnoille. Varmista, että palvelimesi IP-osoite on sallittujen listalla, jos haluat käyttää kaikkia ominaisuuksia.
 
-## Automatic Updates
+## Automaattiset päivitykset
 
-This plugin supports automatic updates through GitHub. Ensure your site can connect to GitHub for seamless updates.
+Tämä lisäosa tukee automaattisia päivityksiä GitHubin kautta. Varmista, että sivustosi voi muodostaa yhteyden GitHubiin saadaksesi saumattomia päivityksiä.
 
-## Support
+## Slack-ilmoitukset
 
-For support, please contact:
+Lisäosa lähettää ilmoituksen määritettyyn Slack-kanavaan, jos sivuston IP-osoite muuttuu ei-sallituksi osoitteeksi. Tämä auttaa seuraamaan mahdollisia luvattomia sivuston siirtoja.
 
-- Email: tuki@sivustamo.fi
-- Phone: 040 187 6687
-- Support form: [https://www.sivustamo.fi/tuki/](https://www.sivustamo.fi/tuki/)
+## Tuki
 
-## License
+Tukiasioissa ota yhteyttä:
 
-This plugin is proprietary software. Unauthorized copying, modification, distribution, or use is strictly prohibited.
+- Sähköposti: tuki@sivustamo.fi
+- Puhelin: 040 187 6687
+- Tukilomake: [https://www.sivustamo.fi/tuki/](https://www.sivustamo.fi/tuki/)
 
-## Author
+## Lisenssi
+
+Tämä lisäosa on yksityisomisteinen ohjelmisto. Luvaton kopiointi, muokkaaminen, jakelu tai käyttö on ehdottomasti kielletty.
+
+## Tekijä
 
 Esko Junnila, Sivustamo Oy
 
 ---
 
-© 2024 Sivustamo Oy. All rights reserved.
+© 2024 Sivustamo Oy. Kaikki oikeudet pidätetään.
