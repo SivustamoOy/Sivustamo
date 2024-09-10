@@ -5,7 +5,7 @@
  * Plugin URI:        https://github.com/SivustamoOy/Sivustamo
  * Description:       Peruskoodit jokaiselle sivustolle
  * Version:           2.3.0
- * Author:            Matti Mieskonen
+ * Author:            Esko Junnila
  * License:           Closed
  * GitHub Plugin URI: https://github.com/SivustamoOy/Sivustamo
  * Primary Branch:    main
